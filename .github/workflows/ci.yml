@@ -42,6 +42,3 @@ jobs:
 
       - name: Run linter
         run: yarn lint
-
-      - name: Run test
-#        run: yarn test --coverage --watchAll=false
