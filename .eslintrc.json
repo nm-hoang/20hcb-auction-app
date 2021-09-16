@@ -20,6 +20,10 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "no-param-reassign": 0,
+    "camelcase": 0,
+    "linebreak-style": ["error", "windows"],
+    "import/prefer-default-export": "off",
     "no-undef": "warn",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "warn",
@@ -73,7 +77,10 @@
           "src/"
         ]
       }
-    }
+    },
+    "import/core-modules": [
+      "@expo/vector-icons"
+    ]
   },
   "globals": {
     "JSX": true
