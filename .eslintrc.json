@@ -77,7 +77,10 @@
           "src/"
         ]
       }
-    }
+    },
+    "import/core-modules": [
+      "@expo/vector-icons"
+    ]
   },
   "globals": {
     "JSX": true
