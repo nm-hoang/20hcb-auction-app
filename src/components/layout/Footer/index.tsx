@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  Row, Col, Image, Typography, Space,
+  Row, Col, Typography, Space,
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { MailOutlined } from '@ant-design/icons';
+import logo from '../../../assets/img/logo/logo-sm.svg';
 import './footer.scss';
 
 const { Text, Title } = Typography;
@@ -13,9 +14,9 @@ function Footer() {
     <Row className="d-flex footer p-5" style={{ columnGap: '40px', rowGap: '30px' }}>
       <Col md={6} lg={4}>
         <Space direction="vertical" size={10} style={{ width: '70%' }}>
-          <Image
-            width="120px"
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          <img
+            src={logo}
+            alt="Aunction App"
           />
           <Text type="secondary">Please contact us if you have any specific idea or request.</Text>
           <Text type="secondary">

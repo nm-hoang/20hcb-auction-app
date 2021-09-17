@@ -6,30 +6,41 @@ import {
   Avatar,
   Menu,
   Dropdown,
+  Button,
 } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
-import { TrademarkCircleOutlined } from '@ant-design/icons';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import Element from './Element';
-import './header.scss';
+import logo from '../../../assets/img/logo/logo-sm.svg';
 
 const { Text } = Typography;
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <Link to="/login">
-        Đăng nhập
-      </Link>
-    </Menu.Item>
-    <Menu.Item>
-      <Link to="/signup">
-        Đăng ký
-      </Link>
-    </Menu.Item>
-  </Menu>
-);
 
 function Header() {
+  const isLoggedIn = false;
   const location = useLocation();
+  const history = useHistory();
+
+  const handleMenu = (e: any) => {
+    switch (e.key) {
+      case 'profile':
+        history.push('/profile');
+        break;
+      case 'logout':
+        history.push('/');
+        break;
+      default:
+        break;
+    }
+  };
+  const menu = (
+    <Menu onClick={handleMenu}>
+      <Menu.Item key="profile">
+        Profile
+      </Menu.Item>
+      <Menu.Item key="logout">
+        Logout
+      </Menu.Item>
+    </Menu>
+  );
   const [selected, setSelected] = useState({
     homepage: false,
     marketplace: false,
@@ -48,17 +59,14 @@ function Header() {
     }
   }, [location]);
   return (
-    <Row className="d-flex px-4 py-3" justify="space-between" style={{ rowGap: '15px' }}>
+    <Row className="d-flex px-4 py-3" justify="space-between" style={{ rowGap: '15px', columnGap: '6rem' }}>
       <Col>
         <Link to="/">
-          <div className="logo-header">
-            <TrademarkCircleOutlined className="me-2" />
-            <Text className="txt-primary">Auction App</Text>
-          </div>
+          <img src={logo} alt="Auction app" />
         </Link>
       </Col>
-      <Col xs={24} sm={8}>
-        <Row style={{ columnGap: '1rem' }} className="d-flex" justify="center">
+      <Col>
+        <Row style={{ columnGap: '1rem' }}>
           <Link to="/">
             <Col>
               <Element text="Home" isSelected={selected.homepage} />
@@ -72,12 +80,24 @@ function Header() {
         </Row>
       </Col>
       <Col>
-        <Dropdown overlay={menu} placement="bottomRight" arrow>
-          <Typography.Link className="ant-dropdown-link">
-            <Avatar style={{ color: '#8c8c8c', backgroundColor: '#E6F7FF' }}>U</Avatar>
-            <Text className="ms-2">Username</Text>
-          </Typography.Link>
-        </Dropdown>
+        <Row style={{ columnGap: '10px' }}>
+          <Link to="/login">
+            <Button type="primary">Login</Button>
+          </Link>
+          <Link to="/signup">
+            <Button>Signup</Button>
+          </Link>
+          {!isLoggedIn
+            ? (
+              <Dropdown overlay={menu} placement="bottomRight" arrow>
+                <Typography.Link className="ant-dropdown-link">
+                  <Avatar style={{ color: '#8c8c8c', backgroundColor: '#E6F7FF' }}>U</Avatar>
+                  <Text className="ms-2">Username</Text>
+                </Typography.Link>
+              </Dropdown>
+            )
+            : ''}
+        </Row>
       </Col>
     </Row>
   );
