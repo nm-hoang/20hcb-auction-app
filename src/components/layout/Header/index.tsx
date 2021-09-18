@@ -9,15 +9,22 @@ import {
   Button,
 } from 'antd';
 import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Element from './Element';
 import logo from '../../../assets/img/logo/logo-sm.svg';
+import {
+  checkAuth,
+  clearAccessTokenFromLocalStorage,
+  clearRoleFromLocalStorage,
+} from '../../../helpers/auth';
+import { setLogInMsgToDefault } from '../../../features/auth/authSlice';
 
 const { Text } = Typography;
 
 function Header() {
-  const isLoggedIn = false;
   const location = useLocation();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleMenu = (e: any) => {
     switch (e.key) {
@@ -25,6 +32,9 @@ function Header() {
         history.push('/profile');
         break;
       case 'logout':
+        dispatch(setLogInMsgToDefault());
+        clearAccessTokenFromLocalStorage();
+        clearRoleFromLocalStorage();
         history.push('/');
         break;
       default:
@@ -50,7 +60,7 @@ function Header() {
       case '/':
         setSelected({ homepage: true, marketplace: false });
         break;
-      case '/login':
+      case '/marketplace':
         setSelected({ homepage: false, marketplace: true });
         break;
       default:
@@ -81,22 +91,25 @@ function Header() {
       </Col>
       <Col>
         <Row style={{ columnGap: '10px' }}>
-          <Link to="/login">
-            <Button type="primary">Login</Button>
-          </Link>
-          <Link to="/signup">
-            <Button>Signup</Button>
-          </Link>
-          {!isLoggedIn
+          {!checkAuth()
             ? (
+              <>
+                <Link to="/login">
+                  <Button type="primary">Login</Button>
+                </Link>
+                <Link to="/signup">
+                  <Button>Signup</Button>
+                </Link>
+              </>
+            )
+            : (
               <Dropdown overlay={menu} placement="bottomRight" arrow>
                 <Typography.Link className="ant-dropdown-link">
                   <Avatar style={{ color: '#8c8c8c', backgroundColor: '#E6F7FF' }}>U</Avatar>
                   <Text className="ms-2">Username</Text>
                 </Typography.Link>
               </Dropdown>
-            )
-            : ''}
+            )}
         </Row>
       </Col>
     </Row>
