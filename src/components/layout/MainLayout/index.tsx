@@ -12,7 +12,7 @@ function MainLayout() {
   return (
     <Layout style={{ background: '#ffffff' }}>
       <Header />
-      <Content className="wrapper" style={{ background: '#f0f2f5' }}>
+      <Content className="wrapper">
         <Switch>
           {mappedRoutes}
         </Switch>
