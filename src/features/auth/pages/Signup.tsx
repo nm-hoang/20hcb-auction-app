@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Row,
   Space,
@@ -7,26 +7,31 @@ import {
   Button,
   Input,
 } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signup } from '../authSlice';
+import { checkAuth } from '../../../helpers/auth';
 
 const { Text, Title } = Typography;
 
 function Signup() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const handleSubmit = (e: object) => {
     dispatch(signup(e));
   };
-
+  useEffect(() => {
+    if (checkAuth()) {
+      history.push('/');
+    }
+  }, []);
   return (
     <Row className="d-flex px-3 my-5" justify="center">
       <Space direction="vertical" size={25}>
         <Text type="secondary">
-          <Title level={2} style={{ marginBottom: 0 }}>Create Auction-app account</Title>
+          <Title level={2} style={{ marginBottom: 0 }}>Create Auction-App Account</Title>
           Register with your email
-          {process.env.REACT_APP_API_GATEWAY}
         </Text>
         <Form
           layout="vertical"

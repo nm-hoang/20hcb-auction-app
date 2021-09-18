@@ -1,6 +1,6 @@
 const MessageStatus = {
   IDLE: 'idle',
-  PENDING: 'pending',
+  PENDING: 'Pending',
   SUCCESS: 'Success',
   WARNING: 'Warning',
   ERROR: 'Error',

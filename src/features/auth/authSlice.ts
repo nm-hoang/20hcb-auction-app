@@ -6,12 +6,13 @@ import {
 import { RootState } from '../../app/store';
 import authApi from '../../api/authApi';
 import MessageStatus from '../../constants/message-status';
-import { setAccessTokenToLocalStorage } from '../../helpers/auth';
+import { setAccessTokenToLocalStorage, setRoleToLocalStorage } from '../../helpers/auth';
 import Notify from '../../helpers/notify';
 
 interface InitialStateI {
   requesting: boolean,
   success?: boolean,
+  message?: string | undefined,
   msg_SignUp: string,
   msg_LogIn: string,
 }
@@ -25,16 +26,30 @@ const initialState: InitialStateI = {
 // ------------------------ACTIONS------------------------
 export const login = createAsyncThunk(
   'auth/login',
-  async (data: object) => {
-    const res = await authApi.login(data);
-    return res;
+  async (data: object, { rejectWithValue }) => {
+    try {
+      const res = await authApi.login(data);
+      return res;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
   },
 );
 export const signup = createAsyncThunk(
   'auth/signup',
-  async (data: object) => {
-    const res = await authApi.signup(data);
-    return res;
+  async (data: object, { rejectWithValue }) => {
+    try {
+      const res = await authApi.signup(data);
+      return res;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
   },
 );
 
@@ -62,13 +77,18 @@ const authSlice = createSlice({
         state.requesting = false;
         state.success = true;
         state.msg_LogIn = MessageStatus.SUCCESS;
-        setAccessTokenToLocalStorage(action.payload.accessToken);
+        console.log(action);
+        setAccessTokenToLocalStorage(action.payload.data.accessToken);
+        setRoleToLocalStorage(action.payload.data.role);
         Notify.success('Logged in successfully', MessageStatus.SUCCESS);
       })
-      .addCase(login.rejected, (state) => {
+      .addCase(login.rejected, (state, action: any) => {
+        console.log(action);
         state.requesting = false;
         state.success = false;
         state.msg_LogIn = MessageStatus.ERROR;
+        Notify.error(action.payload.message ? action.payload.message
+          : action.error.message, MessageStatus.ERROR);
       })
       // Signup
       .addCase(signup.pending, (state) => {
@@ -83,10 +103,12 @@ const authSlice = createSlice({
         setAccessTokenToLocalStorage(action.payload.accessToken);
         Notify.success('Signed up successfully', MessageStatus.SUCCESS);
       })
-      .addCase(signup.rejected, (state) => {
+      .addCase(signup.rejected, (state, action: any) => {
         state.requesting = false;
         state.success = false;
         state.msg_SignUp = MessageStatus.ERROR;
+        Notify.error(action.payload.message ? action.payload.message
+          : action.error.message, MessageStatus.ERROR);
       });
   },
 });
