@@ -69,7 +69,7 @@ function Header() {
     }
   }, [location]);
   return (
-    <Row className="d-flex px-4 py-3" justify="space-between" style={{ rowGap: '15px', columnGap: '6rem' }}>
+    <Row className="d-flex px-4 py-3 bg-white" justify="space-between" style={{ rowGap: '15px', columnGap: '6rem' }}>
       <Col>
         <Link to="/">
           <img src={logo} alt="Auction app" />
@@ -95,10 +95,10 @@ function Header() {
             ? (
               <>
                 <Link to="/login">
-                  <Button type="primary">Login</Button>
+                  <Button type="primary">Log In</Button>
                 </Link>
                 <Link to="/signup">
-                  <Button>Signup</Button>
+                  <Button>Register</Button>
                 </Link>
               </>
             )

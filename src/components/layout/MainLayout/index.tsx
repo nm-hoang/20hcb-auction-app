@@ -10,9 +10,9 @@ const { Content } = Layout;
 
 function MainLayout() {
   return (
-    <Layout style={{ background: '#ffffff' }}>
+    <Layout>
       <Header />
-      <Content className="wrapper">
+      <Content className="wrapper bg-light min-h-50">
         <Switch>
           {mappedRoutes}
         </Switch>

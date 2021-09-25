@@ -26,9 +26,5 @@ export const clearRoleFromLocalStorage = () => {
 export const checkAuth = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN);
 
-  if (!token) {
-    return false;
-  }
-
-  return true;
+  return !!token;
 };
