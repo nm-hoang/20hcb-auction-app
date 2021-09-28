@@ -29,3 +29,10 @@ export interface Account {
   profilePicture: Image
   createdAt: string
 }
+
+export interface CurrentUser {
+  uuid: string;
+  profilePicture: Image;
+  fullName: string;
+  username: string;
+}

@@ -1,5 +1,8 @@
+import { CurrentUser } from '../types/accountType';
+
 const LOCAL_STORAGE_ACCESS_TOKEN = 'access_token';
 const LOCAL_STORAGE_ROLE = 'role';
+export const LOCAL_STORAGE_CURRENT_USER = 'current_user';
 
 export const setAccessTokenToLocalStorage = (accessToken: string) => {
   localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN, accessToken);
@@ -28,3 +31,7 @@ export const checkAuth = () => {
 
   return !!token;
 };
+
+export const setCurrentUserToLocalStorage = (
+  currentUser: CurrentUser,
+) => localStorage.setItem(LOCAL_STORAGE_CURRENT_USER, JSON.stringify(currentUser));

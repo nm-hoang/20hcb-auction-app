@@ -6,8 +6,9 @@ import {
 import { RootState } from '../../app/store';
 import authApi from '../../api/authApi';
 import MessageStatus from '../../constants/message-status';
-import { setAccessTokenToLocalStorage, setRoleToLocalStorage } from '../../helpers/auth';
+import { setAccessTokenToLocalStorage, setCurrentUserToLocalStorage, setRoleToLocalStorage } from '../../helpers/auth';
 import Notify from '../../helpers/notify';
+import { CurrentUser } from '../../types/accountType';
 
 interface InitialStateI {
   requesting: boolean,
@@ -77,9 +78,18 @@ const authSlice = createSlice({
         state.requesting = false;
         state.success = true;
         state.msg_LogIn = MessageStatus.SUCCESS;
+
+        const currentUser: CurrentUser = {
+          uuid: action.payload.data.uuid,
+          fullName: action.payload.data.fullName,
+          username: action.payload.data.username,
+          profilePicture: action.payload.data.profilePicture,
+        };
+
         console.log(action);
         setAccessTokenToLocalStorage(action.payload.data.accessToken);
         setRoleToLocalStorage(action.payload.data.role);
+        setCurrentUserToLocalStorage(currentUser);
         Notify.success('Logged in successfully', MessageStatus.SUCCESS);
       })
       .addCase(login.rejected, (state, action: any) => {

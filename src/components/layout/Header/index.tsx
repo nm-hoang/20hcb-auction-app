@@ -15,9 +15,10 @@ import logo from '../../../assets/img/logo/logo-sm.svg';
 import {
   checkAuth,
   clearAccessTokenFromLocalStorage,
-  clearRoleFromLocalStorage,
+  clearRoleFromLocalStorage, LOCAL_STORAGE_CURRENT_USER,
 } from '../../../helpers/auth';
 import { setLogInMsgToDefault } from '../../../features/auth/authSlice';
+import { CurrentUser } from '../../../types/accountType';
 
 const { Text } = Typography;
 
@@ -25,6 +26,10 @@ function Header() {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const currentUser: CurrentUser = JSON.parse(
+    localStorage.getItem(LOCAL_STORAGE_CURRENT_USER) as string,
+  );
 
   const handleMenu = (e: any) => {
     switch (e.key) {
@@ -105,8 +110,11 @@ function Header() {
             : (
               <Dropdown overlay={menu} placement="bottomRight" arrow>
                 <Typography.Link className="ant-dropdown-link">
-                  <Avatar style={{ color: '#8c8c8c', backgroundColor: '#E6F7FF' }}>U</Avatar>
-                  <Text className="ms-2">Username</Text>
+                  <Avatar
+                    style={{ color: '#8c8c8c', backgroundColor: '#E6F7FF' }}
+                    src={currentUser.profilePicture.secureUrl}
+                  />
+                  <Text className="ms-2">{currentUser.fullName}</Text>
                 </Typography.Link>
               </Dropdown>
             )}
