@@ -1,0 +1,10 @@
+.truncate--100 {
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fs-caption {
+  font-size: $fs-caption;
+}

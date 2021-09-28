@@ -12,7 +12,7 @@ function MainLayout() {
   return (
     <Layout>
       <Header />
-      <Content className="wrapper bg-light min-h-50">
+      <Content className="wrapper bg-white">
         <Switch>
           {mappedRoutes}
         </Switch>

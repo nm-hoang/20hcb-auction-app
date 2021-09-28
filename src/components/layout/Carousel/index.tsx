@@ -19,7 +19,7 @@ function CarouselComponent() {
       {
         images.map((image) => (
           <Image
-            id={uuid()}
+            key={uuid()}
             preview={false}
             src={image}
             height="auto"
