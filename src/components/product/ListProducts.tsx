@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import { Product } from '../../types/productType';
-import ProductCard from './ProductCard';
 import { ProductConditions } from '../../api/productApi';
+import StatedProductCard from './StatedProductCard';
 
 export interface IListProductProps {
   title?: string
@@ -29,7 +29,7 @@ function ListProducts(props: IListProductProps): JSX.Element {
       <Row gutter={[32, 48]} justify="start" className="mb-3">
         {products?.map((product) => (
           <Col key={product._id} className="gutter-row" xxl={6} xl={6} lg={8} md={12} sm={24} xs={20}>
-            <ProductCard product={product} />
+            <StatedProductCard product={product} />
           </Col>
         ))}
       </Row>

@@ -31,7 +31,7 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
   return (
     <>
       <Card
-        className="bg-light rounded-12 p-1 hoverable"
+        className="bg-light rounded-12 p-1 hoverable border--highlight"
         size="small"
         bordered={false}
       >
