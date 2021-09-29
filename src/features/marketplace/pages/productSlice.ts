@@ -6,18 +6,24 @@ import { FetchProductOptions, Product } from '../../../types/productType';
 import productApi from '../../../api/productApi';
 import { RootState } from '../../../app/store';
 
-interface IHomePageState extends IState<Product> {
+interface IProductSliceState extends IState<Product> {
   listNextClose?: Product[]
   listHighestBidTurns?: Product[]
   listHighestPrice?: Product[]
+  total?: number
 }
 
 const productDomain = 'product';
 
-const initialState: IHomePageState = {
+const initialState: IProductSliceState = {
   requesting: false,
   list: [],
 };
+
+export const getProductCount = createAsyncThunk(
+  `${productDomain}/getProductCount`,
+  async () => productApi.getCount(),
+);
 
 export const getProducts = createAsyncThunk(
   `${productDomain}/getProducts`,
@@ -35,29 +41,36 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: ((builder) => {
     builder
-      .addCase(getProducts.pending, (state: IHomePageState) => {
+      .addCase(getProductCount.pending, (state: IProductSliceState) => {
         state.requesting = true;
       })
-      .addCase(getProducts.fulfilled, (state: IHomePageState, action: any) => {
+      .addCase(getProductCount.fulfilled, (state: IProductSliceState, action) => {
+        state.requesting = false;
+        state.total = action.payload.count;
+      })
+      .addCase(getProducts.pending, (state: IProductSliceState) => {
+        state.requesting = true;
+      })
+      .addCase(getProducts.fulfilled, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.success = true;
         state.list = action.payload;
       })
-      .addCase(getProducts.rejected, (state: IHomePageState, action: any) => {
+      .addCase(getProducts.rejected, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.error = action.payload;
       })
-      .addCase(getTopFiveProducts.pending, (state: IHomePageState) => {
+      .addCase(getTopFiveProducts.pending, (state: IProductSliceState) => {
         state.requesting = true;
       })
-      .addCase(getTopFiveProducts.fulfilled, (state: IHomePageState, action: any) => {
+      .addCase(getTopFiveProducts.fulfilled, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.success = true;
         state.listNextClose = action.payload.nextCloseProducts;
         state.listHighestBidTurns = action.payload.highestBidTurnsProducts;
         state.listHighestPrice = action.payload.highestPriceProducts;
       })
-      .addCase(getTopFiveProducts.rejected, (state: IHomePageState, action: any) => {
+      .addCase(getTopFiveProducts.rejected, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.error = action.payload;
       });
@@ -68,7 +81,7 @@ export const selectProduct = (state: RootState) => state.product;
 
 export const selectProductList = createSelector(
   [selectProduct],
-  (state: IHomePageState) => state.list,
+  (state: IProductSliceState) => state.list,
 );
 
 export default productSlice.reducer;

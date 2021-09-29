@@ -3,9 +3,10 @@ import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import CarouselComponent from '../../../components/layout/Carousel';
 import ListProducts from '../../../components/product/ListProducts';
-import { getProducts, selectProduct } from './productSlice';
+import { getProductCount, getProducts, selectProduct } from './productSlice';
 import ProductFilter from '../../product/ProductFilter';
 import { ConditionQueryType, SortQueryType } from '../../../types/productType';
+import PaginationComponent from '../../../components/common/PaginationComponent';
 
 function MarketplacePage(): JSX.Element {
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ function MarketplacePage(): JSX.Element {
   const [sortBy, setSortBy] = useState<SortQueryType>(SortQueryType.TIME);
   const [cond, setCond] = useState<ConditionQueryType>(ConditionQueryType.HIGH_LOW);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const { total } = productState;
 
   const handleApplyFilters = (
     sortByValue: SortQueryType, condValue: ConditionQueryType,
@@ -22,8 +25,13 @@ function MarketplacePage(): JSX.Element {
     setCurrentPage(1);
   };
 
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+    setCurrentPage(page);
+  };
+
   useEffect(() => {
     dispatch(getProducts({ page: currentPage, sortBy, cond }));
+    dispatch(getProductCount());
   }, [currentPage, sortBy, cond]);
 
   return (
@@ -41,6 +49,15 @@ function MarketplacePage(): JSX.Element {
             className="mt-5"
             products={productState.list}
           />
+
+          <Row justify="center" className="mb-3 my-5">
+            <Col>
+              <PaginationComponent
+                onPageChange={handlePageChange}
+                total={total!}
+              />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </>

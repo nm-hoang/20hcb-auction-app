@@ -14,6 +14,8 @@ export enum ProductConditions {
 }
 
 const productApi = {
+  getCount: () => axiosClient.get(`${url}/count`).then((res) => res.data),
+
   getProducts: (
     {
       page = 1,
