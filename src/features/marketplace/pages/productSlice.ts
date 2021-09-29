@@ -1,10 +1,10 @@
 import {
   createAsyncThunk, createSelector, createSlice,
 } from '@reduxjs/toolkit';
-import { IState } from '../../types/stateType';
-import { FetchProductOptions, Product } from '../../types/productType';
-import productApi from '../../api/productApi';
-import { RootState } from '../../app/store';
+import { IState } from '../../../types/stateType';
+import { FetchProductOptions, Product } from '../../../types/productType';
+import productApi from '../../../api/productApi';
+import { RootState } from '../../../app/store';
 
 interface IHomePageState extends IState<Product> {
   listNextClose?: Product[]

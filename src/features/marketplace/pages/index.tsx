@@ -3,8 +3,8 @@ import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import CarouselComponent from '../../../components/layout/Carousel';
 import ListProducts from '../../../components/product/ListProducts';
-import { getProducts, selectProduct } from '../../homepage/productSlice';
-import ProductFilter from '../ProductFilter';
+import { getProducts, selectProduct } from './productSlice';
+import ProductFilter from '../../product/ProductFilter';
 import { ConditionQueryType, SortQueryType } from '../../../types/productType';
 
 function MarketplacePage(): JSX.Element {
