@@ -87,7 +87,7 @@ function Header() {
               <Element text="Home" isSelected={selected.homepage} />
             </Col>
           </Link>
-          <Link to="/">
+          <Link to="/marketplace">
             <Col>
               <Element text="Marketplace" isSelected={selected.marketplace} />
             </Col>

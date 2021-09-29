@@ -45,3 +45,13 @@ export interface Product {
   bannedBidder: string[]
   createdAt: string
 }
+
+export enum SortQueryType {
+  TIME = 'time',
+  PRICE = 'price'
+}
+
+export enum ConditionQueryType {
+  LOW_HIGH = 'low-high',
+  HIGH_LOW = 'high-low'
+}

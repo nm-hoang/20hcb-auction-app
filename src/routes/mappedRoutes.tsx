@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Homepage from '../features/homepage/pages';
 import Login from '../features/auth/pages/Login';
 import Signup from '../features/auth/pages/Signup';
+import MarketplacePage from '../features/marketplace/pages';
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     key: uuidv4(),
     path: '/signup',
     component: Signup,
+  },
+  {
+    key: uuidv4(),
+    path: '/marketplace',
+    component: MarketplacePage,
   },
 ];
 
