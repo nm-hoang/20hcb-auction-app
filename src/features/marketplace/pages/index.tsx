@@ -1,17 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import CarouselComponent from '../../../components/layout/Carousel';
 import ListProducts from '../../../components/product/ListProducts';
 import { getProducts, selectProduct } from '../../homepage/productSlice';
+import ProductFilter from '../ProductFilter';
+import { ConditionQueryType, SortQueryType } from '../../../types/productType';
 
 function MarketplacePage(): JSX.Element {
   const dispatch = useDispatch();
   const productState = useSelector(selectProduct);
+  const [sortBy, setSortBy] = useState<SortQueryType>(SortQueryType.TIME);
+  const [cond, setCond] = useState<ConditionQueryType>(ConditionQueryType.HIGH_LOW);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const handleApplyFilters = (
+    sortByValue: SortQueryType, condValue: ConditionQueryType,
+  ) => {
+    setSortBy(sortByValue);
+    setCond(condValue);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, []);
+    dispatch(getProducts({ page: currentPage, sortBy, cond }));
+  }, [currentPage, sortBy, cond]);
 
   return (
     <>
@@ -20,8 +33,7 @@ function MarketplacePage(): JSX.Element {
         <Col xxl={16} xl={20} lg={22} md={20} sm={18} xs={22}>
           <Row justify="start" className="mb-3 my-5">
             <Col>
-              {/* TODO: create filter component */}
-              This is the filter
+              <ProductFilter onApplyFilters={handleApplyFilters} />
             </Col>
           </Row>
 

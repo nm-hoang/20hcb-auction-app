@@ -55,3 +55,9 @@ export enum ConditionQueryType {
   LOW_HIGH = 'low-high',
   HIGH_LOW = 'high-low'
 }
+
+export type FetchProductOptions = {
+  page: number
+  sortBy: SortQueryType
+  cond: ConditionQueryType
+}

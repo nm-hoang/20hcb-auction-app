@@ -2,7 +2,7 @@ import {
   createAsyncThunk, createSelector, createSlice,
 } from '@reduxjs/toolkit';
 import { IState } from '../../types/stateType';
-import { Product } from '../../types/productType';
+import { FetchProductOptions, Product } from '../../types/productType';
 import productApi from '../../api/productApi';
 import { RootState } from '../../app/store';
 
@@ -21,7 +21,7 @@ const initialState: IHomePageState = {
 
 export const getProducts = createAsyncThunk(
   `${productDomain}/getProducts`,
-  async () => productApi.getProducts(),
+  async (fetchOption: FetchProductOptions) => productApi.getProducts(fetchOption),
 );
 
 export const getTopFiveProducts = createAsyncThunk(

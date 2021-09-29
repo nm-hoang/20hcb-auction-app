@@ -1,5 +1,7 @@
 import axiosClient from './axiosClient';
-import { ConditionQueryType, Product, SortQueryType } from '../types/productType';
+import {
+  ConditionQueryType, FetchProductOptions, Product, SortQueryType,
+} from '../types/productType';
 
 const prefix = '/products';
 const url = `${prefix}`;
@@ -13,9 +15,11 @@ export enum ProductConditions {
 
 const productApi = {
   getProducts: (
-    page: number = 1,
-    sortBy: SortQueryType = SortQueryType.TIME,
-    cond: ConditionQueryType = ConditionQueryType.HIGH_LOW,
+    {
+      page = 1,
+      sortBy = SortQueryType.TIME,
+      cond = ConditionQueryType.HIGH_LOW,
+    }: FetchProductOptions,
   ) => axiosClient.get(`${url}?page=${page}&sortBy=${sortBy}&cond=${cond}`)
     .then((res) => res.data),
 
