@@ -35,3 +35,6 @@ export const checkAuth = () => {
 export const setCurrentUserToLocalStorage = (
   currentUser: CurrentUser,
 ) => localStorage.setItem(LOCAL_STORAGE_CURRENT_USER, JSON.stringify(currentUser));
+
+export const getCurrentUserFromLocalStorage = (
+) => JSON.parse(localStorage.getItem(LOCAL_STORAGE_CURRENT_USER) as string);

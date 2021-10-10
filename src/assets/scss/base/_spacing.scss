@@ -340,3 +340,24 @@
   border-bottom-left-radius: 0.25rem !important;
   border-top-left-radius: 0.25rem !important;
 }
+
+.max-h-300 {
+  max-height: 300px;
+  overflow-y: inherit;
+  overflow-x: hidden;
+}
+
+.max-h-200 {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+}
+
+@mixin make-width-size() {
+  @for $width from 1 through 10 {
+    .w-#{$width * 10} {
+      width: ($width * 10%) !important;
+    }
+  }
+}
+
+@include make-width-size();

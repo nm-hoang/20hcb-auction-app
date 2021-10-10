@@ -5,6 +5,7 @@ import Homepage from '../features/homepage/pages';
 import Login from '../features/auth/pages/Login';
 import Signup from '../features/auth/pages/Signup';
 import MarketplacePage from '../features/marketplace/pages';
+import ProductDetails from '../features/product/page/ProductDetails';
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     key: uuidv4(),
     path: '/marketplace',
     component: MarketplacePage,
+  },
+  {
+    key: uuidv4(),
+    path: '/products/:id',
+    component: ProductDetails,
   },
 ];
 

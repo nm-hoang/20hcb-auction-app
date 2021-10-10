@@ -3,7 +3,7 @@ import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import CarouselComponent from '../../../components/layout/Carousel';
 import ListProducts from '../../../components/product/ListProducts';
-import { getProductCount, getProducts, selectProduct } from './productSlice';
+import { getProductCount, getProducts, selectProduct } from '../../product/productSlice';
 import ProductFilter from '../../product/ProductFilter';
 import { ConditionQueryType, SortQueryType } from '../../../types/productType';
 import PaginationComponent from '../../../components/common/PaginationComponent';

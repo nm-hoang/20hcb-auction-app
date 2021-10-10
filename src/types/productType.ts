@@ -1,14 +1,9 @@
 import { Image } from './imageType';
-
-export type UserBrief = {
-  fullName: string
-  profilePicture: Image
-  rating: number
-}
+import { UserBrief } from './userBriefType';
 
 export type Description = {
   version: string
-  data: object
+  data: string
 }
 
 export type Category = {
@@ -60,4 +55,16 @@ export type FetchProductOptions = {
   page: number
   sortBy: SortQueryType
   cond: ConditionQueryType
+}
+
+export type FetchProductBidLogsQuery = {
+  productId: string
+  page?: number
+  limit?: number
+}
+
+export type PatchPlaceBidQuery = {
+  productId: string
+  bidderUUID: string
+  price: number
 }

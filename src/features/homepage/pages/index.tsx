@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Col, Row, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import CarouselComponent from '../../../components/layout/Carousel';
-import { getTopFiveProducts, selectProduct } from '../../marketplace/pages/productSlice';
+import { getTopFiveProducts, selectProduct } from '../../product/productSlice';
 import ListProducts from '../../../components/product/ListProducts';
 
 function Homepage() {

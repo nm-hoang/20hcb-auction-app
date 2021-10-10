@@ -1,10 +1,16 @@
 import axiosClient from './axiosClient';
 import {
-  ConditionQueryType, FetchProductOptions, Product, SortQueryType,
+  ConditionQueryType,
+  FetchProductBidLogsQuery,
+  FetchProductOptions,
+  PatchPlaceBidQuery,
+  Product,
+  SortQueryType,
 } from '../types/productType';
 
 const prefix = '/products';
 const url = `${prefix}`;
+const logUrl = '/logs';
 
 export enum ProductConditions {
   NEXT_CLOSE = 'next-close',
@@ -32,6 +38,21 @@ const productApi = {
     .then((res) => res.data),
 
   createProduct: (product: Product) => axiosClient.post(url, product),
+
+  getProductBidLogs: (
+    {
+      productId,
+      page = 1, limit = 20,
+    }: FetchProductBidLogsQuery,
+  ) => axiosClient.get(`${logUrl}?productId=${productId}&page=${page}&limit=${limit}`)
+    .then((res) => res.data),
+
+  placeBid: ({
+    productId,
+    bidderUUID,
+    price,
+  }: PatchPlaceBidQuery) => axiosClient.patch(`${logUrl}?productId=${productId}&bidderUUID=${bidderUUID}&price=${price}`)
+    .then((res) => res.data),
 };
 
 export default productApi;

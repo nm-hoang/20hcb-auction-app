@@ -37,6 +37,7 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
       >
         {/* TODO: constraint square */}
         <Image
+          width="100%"
           onClick={onSelect}
           className="rounded-4"
           preview={false}
