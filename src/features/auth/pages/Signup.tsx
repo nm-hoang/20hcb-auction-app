@@ -8,9 +8,14 @@ import {
   Input,
 } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { signup } from '../authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signup,
+  selectRequesting,
+  selectSignUpMessage,
+} from '../authSlice';
 import { checkAuth } from '../../../helpers/auth';
+import MessageStatus from '../../../constants/message-status';
 
 const { Text, Title } = Typography;
 
@@ -18,6 +23,8 @@ function Signup() {
   const history = useHistory();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const requesting = useSelector(selectRequesting);
+  const msg_SignUp = useSelector(selectSignUpMessage);
   const handleSubmit = (e: object) => {
     dispatch(signup(e));
   };
@@ -26,6 +33,11 @@ function Signup() {
       history.push('/');
     }
   }, []);
+  useEffect(() => {
+    if (msg_SignUp === MessageStatus.SUCCESS) {
+      history.push('/checkmail');
+    }
+  }, [msg_SignUp]);
   return (
     <Row className="d-flex px-3 my-5" justify="center">
       <Space direction="vertical" size={25}>
@@ -78,7 +90,7 @@ function Signup() {
           </Form.Item>
           <Form.Item
             label="Full name"
-            name="fullname"
+            name="fullName"
             rules={[
               {
                 required: true,
@@ -118,7 +130,7 @@ function Signup() {
           </Form.Item>
           <Form.Item
             label="Confirm password"
-            name="confirmPassword"
+            name="passwordConfirmation"
             dependencies={['password']}
             hasFeedback
             rules={[
@@ -131,7 +143,6 @@ function Signup() {
                   if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
-
                   return Promise.reject(new Error('Password does not match'));
                 },
               }),
@@ -141,7 +152,14 @@ function Signup() {
           </Form.Item>
           <Form.Item>
             <Row className="d-flex" style={{ columnGap: '.25rem', rowGap: '.5rem' }}>
-              <Button type="primary" htmlType="submit" block>Create Account</Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={requesting === MessageStatus.PENDING}
+              >
+                Create Account
+              </Button>
               <Text type="secondary">Already have account?</Text>
               <Link to="/login">
                 <Text className="txt-primary">Login</Text>

@@ -31,7 +31,6 @@ function Login() {
   }, []);
 
   useEffect(() => {
-    console.log(msg_LogIn);
     if (msg_LogIn === MessageStatus.SUCCESS) {
       history.push('/');
     }
@@ -78,7 +77,7 @@ function Login() {
             <Row className="d-flex" style={{ columnGap: '.25rem', rowGap: '.5rem' }}>
               <Button type="primary" htmlType="submit" block>Login</Button>
               <Space direction="vertical" size={0}>
-                <Link to="/recoverypassword">
+                <Link to="/recovery-password">
                   <Text className="txt-primary">Forgot your password</Text>
                 </Link>
                 <Link to="/signup">

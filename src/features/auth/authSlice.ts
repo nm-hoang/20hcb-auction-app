@@ -16,12 +16,16 @@ interface InitialStateI {
   message?: string | undefined,
   msg_SignUp: string,
   msg_LogIn: string,
+  msg_ResetPassword: string,
+  msg_RecoveryPassword: string,
 }
 
 const initialState: InitialStateI = {
   requesting: false,
   msg_LogIn: MessageStatus.IDLE,
   msg_SignUp: MessageStatus.IDLE,
+  msg_ResetPassword: MessageStatus.IDLE,
+  msg_RecoveryPassword: MessageStatus.IDLE,
 };
 
 // ------------------------ACTIONS------------------------
@@ -54,6 +58,19 @@ export const signup = createAsyncThunk(
   },
 );
 
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (token: string) => authApi.resetPassword(token),
+);
+
+export const recoveryPassword = createAsyncThunk(
+  'auth/recoveryPassword',
+  async (email: string) => {
+    const res = await authApi.recoveryPassword(email);
+    return res;
+  },
+);
+
 // ------------------------SLICERS------------------------
 const authSlice = createSlice({
   name: 'auth',
@@ -68,7 +85,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login
       .addCase(login.pending, (state) => {
         state.requesting = true;
         state.success = true;
@@ -85,22 +101,17 @@ const authSlice = createSlice({
           username: action.payload.data.username,
           profilePicture: action.payload.data.profilePicture,
         };
-
-        console.log(action);
         setAccessTokenToLocalStorage(action.payload.data.accessToken);
         setRoleToLocalStorage(action.payload.data.role);
         setCurrentUserToLocalStorage(currentUser);
         Notify.success('Logged in successfully', MessageStatus.SUCCESS);
       })
       .addCase(login.rejected, (state, action: any) => {
-        console.log(action);
         state.requesting = false;
         state.success = false;
         state.msg_LogIn = MessageStatus.ERROR;
-        Notify.error(action.payload.message ? action.payload.message
-          : action.error.message, MessageStatus.ERROR);
+        Notify.error('Log in failure', MessageStatus.ERROR);
       })
-      // Signup
       .addCase(signup.pending, (state) => {
         state.requesting = true;
         state.success = true;
@@ -117,8 +128,42 @@ const authSlice = createSlice({
         state.requesting = false;
         state.success = false;
         state.msg_SignUp = MessageStatus.ERROR;
-        Notify.error(action.payload.message ? action.payload.message
-          : action.error.message, MessageStatus.ERROR);
+        state.message = action.payload;
+        Notify.error('Sign up failure', MessageStatus.ERROR);
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.requesting = true;
+        state.success = true;
+        state.msg_ResetPassword = MessageStatus.PENDING;
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.requesting = false;
+        state.success = true;
+        state.msg_ResetPassword = MessageStatus.SUCCESS;
+      })
+      .addCase(resetPassword.rejected, (state, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.message = action.payload;
+        state.msg_ResetPassword = MessageStatus.ERROR;
+        Notify.error('Reset password failure', MessageStatus.ERROR);
+      })
+      .addCase(recoveryPassword.pending, (state) => {
+        state.requesting = true;
+        state.success = true;
+        state.msg_RecoveryPassword = MessageStatus.PENDING;
+      })
+      .addCase(recoveryPassword.fulfilled, (state) => {
+        state.requesting = false;
+        state.success = true;
+        state.msg_RecoveryPassword = MessageStatus.SUCCESS;
+      })
+      .addCase(recoveryPassword.rejected, (state, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.message = action.payload;
+        state.msg_RecoveryPassword = MessageStatus.ERROR;
+        Notify.error('Reset password failure', MessageStatus.ERROR);
       });
   },
 });
@@ -140,5 +185,12 @@ export const selectSignUpMessage = createSelector(
   [selectAuth],
   (state: any) => state.msg_SignUp,
 );
-
+export const selectResetPasswordMessage = createSelector(
+  [selectAuth],
+  (state: any) => state.msg_ResetPassword,
+);
+export const selectRecoveryPasswordMessage = createSelector(
+  [selectAuth],
+  (state: any) => state.msg_RecoveryPassword,
+);
 export default authSlice.reducer;

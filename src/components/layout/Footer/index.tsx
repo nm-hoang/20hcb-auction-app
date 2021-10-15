@@ -12,8 +12,8 @@ const { Text, Title } = Typography;
 function Footer() {
   return (
     <Row className="d-flex footer p-5" style={{ columnGap: '40px', rowGap: '30px' }}>
-      <Col md={6} lg={4}>
-        <Space direction="vertical" size={10} style={{ width: '70%' }}>
+      <Col md={6} lg={5}>
+        <Space direction="vertical" size={10}>
           <img
             src={logo}
             alt="Aunction App"
