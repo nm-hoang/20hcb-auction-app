@@ -37,6 +37,7 @@ export interface Product {
   price: Price
   type: Type
   closeDate: number
+  bidTurns: number
   bannedBidder: string[]
   createdAt: string
 }

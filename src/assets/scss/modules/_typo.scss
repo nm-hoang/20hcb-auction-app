@@ -1,8 +1,15 @@
-.truncate--100 {
-  width: 120px;
+.truncate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &--100 {
+    max-width: 120px !important;
+  }
+
+  &--200 {
+    max-width: 140px !important;
+  }
 }
 
 .fs-caption {

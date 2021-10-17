@@ -6,6 +6,9 @@ import Login from '../features/auth/pages/Login';
 import Signup from '../features/auth/pages/Signup';
 import MarketplacePage from '../features/marketplace/pages';
 import ProductDetails from '../features/product/page/ProductDetails';
+import UserProfilePage from '../features/profile/pages/UserProfilePage';
+import EditProfilePage from '../features/profile/pages/EditProfilePage';
+import ChangePasswordPage from '../features/profile/pages/ChangePasswordPage';
 
 const routes = [
   {
@@ -32,6 +35,21 @@ const routes = [
     key: uuidv4(),
     path: '/products/:id',
     component: ProductDetails,
+  },
+  {
+    key: uuidv4(),
+    path: '/profile',
+    component: UserProfilePage,
+  },
+  {
+    key: uuidv4(),
+    path: '/profile/modify',
+    component: EditProfilePage,
+  },
+  {
+    key: uuidv4(),
+    path: '/profile/password/modify',
+    component: ChangePasswordPage,
   },
 ];
 

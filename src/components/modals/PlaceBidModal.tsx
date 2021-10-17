@@ -8,6 +8,10 @@ export interface IPlaceBidModal {
   onPlaceBid: Function
 }
 
+/**
+ * Unused
+ * @constructor
+ */
 function PlaceBidModal(props: IPlaceBidModal):JSX.Element {
   const {
     isVisible, onCancel, onOk, onPlaceBid,

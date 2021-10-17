@@ -31,7 +31,7 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
   return (
     <>
       <Card
-        className="bg-light rounded-12 p-1 hoverable border--highlight"
+        className="p-1 hoverable border--highlight"
         size="small"
         bordered={false}
       >
@@ -44,7 +44,7 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
           src={product.images[0].secureUrl}
         />
         <Row justify="space-between" align="middle" className="my-2">
-          <Col className="truncate--100">
+          <Col className="truncate truncate--100">
             <Text className="mb-0" onClick={onSelect}>{product.name}</Text>
           </Col>
           <Col>
@@ -56,9 +56,8 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
           <Col>
             <Text type="secondary">Current Bid</Text>
           </Col>
-          <Col>
+          <Col className="truncate truncate--200">
             <Title level={5}>
-              ₫
               {toCurrencyFormat(product.price.currentBid)}
             </Title>
           </Col>

@@ -38,3 +38,13 @@ export const setCurrentUserToLocalStorage = (
 
 export const getCurrentUserFromLocalStorage = (
 ) => JSON.parse(localStorage.getItem(LOCAL_STORAGE_CURRENT_USER) as string);
+
+export const getHeaders = () => {
+  const accessToken = getAccessTokenFromLocalStorage();
+
+  return {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+};

@@ -8,7 +8,8 @@ import authApi from '../../api/authApi';
 import MessageStatus from '../../constants/message-status';
 import { setAccessTokenToLocalStorage, setCurrentUserToLocalStorage, setRoleToLocalStorage } from '../../helpers/auth';
 import Notify from '../../helpers/notify';
-import { CurrentUser } from '../../types/accountType';
+import { Account, CurrentUser } from '../../types/accountType';
+import { ChangePasswordType } from '../../types/authType';
 
 interface InitialStateI {
   requesting: boolean,
@@ -16,6 +17,8 @@ interface InitialStateI {
   message?: string | undefined,
   msg_SignUp: string,
   msg_LogIn: string,
+  currentUserDetails?: Account,
+  error?: any
 }
 
 const initialState: InitialStateI = {
@@ -52,6 +55,16 @@ export const signup = createAsyncThunk(
       return rejectWithValue(error.response.data);
     }
   },
+);
+
+export const getMe = createAsyncThunk(
+  'auth/getMe',
+  async () => authApi.getMe(),
+);
+
+export const changePassword = createAsyncThunk(
+  'auth/changePassword',
+  async (data: ChangePasswordType) => authApi.changePassword(data),
 );
 
 // ------------------------SLICERS------------------------
@@ -119,6 +132,32 @@ const authSlice = createSlice({
         state.msg_SignUp = MessageStatus.ERROR;
         Notify.error(action.payload.message ? action.payload.message
           : action.error.message, MessageStatus.ERROR);
+      })
+      .addCase(getMe.pending, (state: InitialStateI) => {
+        state.requesting = true;
+      })
+      .addCase(getMe.fulfilled, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.currentUserDetails = action.payload;
+      })
+      .addCase(getMe.rejected, (state: InitialStateI) => {
+        state.requesting = false;
+        state.success = false;
+      })
+      .addCase(changePassword.pending, (state: InitialStateI) => {
+        state.requesting = true;
+      })
+      .addCase(changePassword.fulfilled, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        if (action.payload) {
+          state.error = action.payload;
+        }
+      })
+      .addCase(changePassword.rejected, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.error = action.payload;
       });
   },
 });
@@ -139,6 +178,11 @@ export const selectLogInMessage = createSelector(
 export const selectSignUpMessage = createSelector(
   [selectAuth],
   (state: any) => state.msg_SignUp,
+);
+
+export const selectGetMe = createSelector(
+  [selectAuth],
+  (state: InitialStateI) => state.currentUserDetails,
 );
 
 export default authSlice.reducer;
