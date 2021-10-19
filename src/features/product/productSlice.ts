@@ -59,6 +59,11 @@ export const patchPlaceBid = createAsyncThunk(
   ) => productApi.placeBid(patchPlaceBidQuery),
 );
 
+export const createProduct = createAsyncThunk(
+  `${productDomain}/createProduct`,
+  async (product: Product) => productApi.createProduct(product),
+);
+
 const productSlice = createSlice({
   name: productDomain,
   initialState,
@@ -141,6 +146,18 @@ const productSlice = createSlice({
         state.requesting = false;
         state.error = action.payload;
         console.log(action.payload);
+      })
+      .addCase(createProduct.pending, (state: IProductSliceState) => {
+        state.requesting = true;
+      })
+      .addCase(createProduct.fulfilled, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        console.log(action);
+      })
+      .addCase(createProduct.rejected, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.error = action.payload;
       });
   }),
 });
@@ -150,6 +167,11 @@ export const selectProduct = (state: RootState) => state.product;
 export const selectProductList = createSelector(
   [selectProduct],
   (state: IProductSliceState) => state.list,
+);
+
+export const selectRequesting = createSelector(
+  [selectProduct],
+  (state: IProductSliceState) => state.requesting,
 );
 
 export default productSlice.reducer;
