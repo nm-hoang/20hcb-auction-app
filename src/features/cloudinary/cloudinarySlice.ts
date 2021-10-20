@@ -2,8 +2,10 @@ import {
   createAsyncThunk,
   createSlice,
   AnyAction,
+  createSelector,
 } from '@reduxjs/toolkit';
 import cloudinaryApi from '../../api/cloudinaryApi';
+import { RootState } from '../../app/store';
 import MessageStatus from '../../constants/message-status';
 import Notify from '../../helpers/notify';
 import { Image } from '../../types/imageType';
@@ -13,19 +15,19 @@ interface InitialStateI extends IState<Image> { }
 
 const initialState: InitialStateI = {
   requesting: false,
+  list: [],
 };
 
 export const uploadFile = createAsyncThunk(
-  'cloundinary/uploadFile',
+  'cloudinary/uploadFile',
   async (file: any) => {
-    console.log(file);
     const res = await cloudinaryApi.uploadFile(file);
     return res;
   },
 );
 
-const isPendingAction = (action: AnyAction) => action.type.endsWith('/pending') && action.type.includes('cloudinay');
-const isRejectedAction = (action: AnyAction) => action.type.endsWith('/rejected') && action.type.includes('cloudinay');
+const isPendingAction = (action: AnyAction) => action.type.endsWith('/pending') && action.type.includes('cloudinary');
+const isRejectedAction = (action: AnyAction) => action.type.endsWith('/rejected') && action.type.includes('cloudinary');
 
 const authSlice = createSlice({
   name: 'cloudinary',
@@ -33,10 +35,10 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(uploadFile.fulfilled, (state, action) => {
+      .addCase(uploadFile.fulfilled, (state: InitialStateI, action: any) => {
         state.requesting = false;
         state.success = true;
-        console.log(action);
+        state.list = state.list!.concat(action.payload);
       })
       .addMatcher(isPendingAction, (state) => {
         state.requesting = true;
@@ -49,5 +51,16 @@ const authSlice = createSlice({
       });
   },
 });
+
+const cloudinaryState = (state: RootState) => state.cloudinary;
+
+export const selectCloudinaryRequesting = createSelector(
+  [cloudinaryState],
+  (state: any) => state.requesting,
+);
+export const selectListImages = createSelector(
+  [cloudinaryState],
+  (state: any) => state.list,
+);
 
 export default authSlice.reducer;
