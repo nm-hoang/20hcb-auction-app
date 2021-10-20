@@ -53,6 +53,7 @@ const productApi = {
     price,
   }: PatchPlaceBidQuery) => axiosClient.patch(`${logUrl}?productId=${productId}&bidderUUID=${bidderUUID}&price=${price}`)
     .then((res) => res.data),
+
 };
 
 export default productApi;

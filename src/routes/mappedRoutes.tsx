@@ -6,6 +6,7 @@ import Login from '../features/auth/pages/Login';
 import Signup from '../features/auth/pages/Signup';
 import MarketplacePage from '../features/marketplace/pages';
 import ProductDetails from '../features/product/page/ProductDetails';
+import AddProduct from '../features/product/page/AddProduct';
 
 const routes = [
   {
@@ -32,6 +33,11 @@ const routes = [
     key: uuidv4(),
     path: '/products/:id',
     component: ProductDetails,
+  },
+  {
+    key: uuidv4(),
+    path: '/add-product',
+    component: AddProduct,
   },
 ];
 
