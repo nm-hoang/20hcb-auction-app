@@ -40,6 +40,7 @@ export interface Product {
   bidTurns: number
   bannedBidder: string[]
   createdAt: string
+  isWatching: boolean
 }
 
 export enum SortQueryType {
@@ -66,6 +67,5 @@ export type FetchProductBidLogsQuery = {
 
 export type PatchPlaceBidQuery = {
   productId: string
-  bidderUUID: string
   price: number
 }

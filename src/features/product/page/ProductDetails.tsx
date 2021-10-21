@@ -9,7 +9,6 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { getProduct, patchPlaceBid, selectProduct } from '../productSlice';
 import ProductImagesGrid from '../ProductImagesGrid';
 import ProductInformationColumn from '../productDetailsPatials/ProductInformationColumn';
-import { getCurrentUserFromLocalStorage } from '../../../helpers/auth';
 
 const { confirm } = Modal;
 
@@ -45,7 +44,6 @@ function ProductDetails(): JSX.Element {
         if (product) {
           dispatch(patchPlaceBid({
             productId: product?._id,
-            bidderUUID: getCurrentUserFromLocalStorage().uuid,
             price: placePrice,
           }));
         }

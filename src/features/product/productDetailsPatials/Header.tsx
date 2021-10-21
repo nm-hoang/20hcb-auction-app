@@ -2,17 +2,28 @@ import React from 'react';
 import {
   Button, Col, Row, Tag, Typography,
 } from 'antd';
-import { HeartOutlined } from '@ant-design/icons';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { addProductToWatchlist } from '../productSlice';
 
 const { Title } = Typography;
 
 export interface IProductHeaderProps {
+  productId: string
   name: string
   categoryName: string
+  isWatching?: boolean
 }
 
 function Header(props: IProductHeaderProps): JSX.Element {
-  const { name, categoryName } = props;
+  const dispatch = useDispatch();
+  const {
+    productId, name, categoryName, isWatching,
+  } = props;
+
+  const handleAddProductToWatchlist = () => {
+    dispatch(addProductToWatchlist({ productId }));
+  };
 
   return (
     <Row
@@ -31,7 +42,8 @@ function Header(props: IProductHeaderProps): JSX.Element {
         <Button
           className="ant-input-borderless"
           shape="circle"
-          icon={<HeartOutlined />}
+          icon={isWatching ? <HeartFilled /> : <HeartOutlined />}
+          onClick={handleAddProductToWatchlist}
         />
       </Col>
     </Row>

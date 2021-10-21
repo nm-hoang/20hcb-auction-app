@@ -3,20 +3,25 @@ import {
   Avatar, Button,
   Card, Col, Divider, Image, Row, Tag, Typography,
 } from 'antd';
-import { ClockCircleTwoTone, HeartOutlined } from '@ant-design/icons';
+import { ClockCircleTwoTone, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { toCurrencyFormat } from '../../helpers/toCurrencyFormat';
 import { Product } from '../../types/productType';
 import useCountdown from '../../hooks/useCountdown';
+import { addProductToWatchlist } from '../../features/product/productSlice';
 
 const { Text, Title } = Typography;
 
 export interface IProductCardProp {
   product: Product
+  isWatching?: boolean
 }
 
 function ProductCard(prop: IProductCardProp): JSX.Element {
-  const { product } = prop;
+  const dispatch = useDispatch();
+
+  const { product, isWatching } = prop;
   const history = useHistory();
   const [hours, minutes, seconds] = useCountdown(product.closeDate);
 
@@ -24,8 +29,8 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
     history.push(`/products/${product._id}`);
   };
 
-  const onAddToFavorite = () => {
-    console.log(product._id);
+  const onAddToFavorite = (productId: string) => {
+    dispatch(addProductToWatchlist({ productId }));
   };
 
   return (
@@ -119,8 +124,8 @@ function ProductCard(prop: IProductCardProp): JSX.Element {
               type="default"
               shape="circle"
               className="ant-input-borderless"
-              icon={<HeartOutlined />}
-              onClick={onAddToFavorite}
+              icon={isWatching ? <HeartFilled /> : <HeartOutlined />}
+              onClick={() => onAddToFavorite(product._id)}
             />
           </Col>
         </Row>

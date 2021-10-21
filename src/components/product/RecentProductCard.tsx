@@ -7,10 +7,10 @@ export interface IProductCardWithBadgeProps extends IProductCardProp {
 }
 
 function RecentProductCard(props: IProductCardWithBadgeProps): JSX.Element {
-  const { product, text } = props;
+  const { product, text, isWatching } = props;
   return (
     <Badge.Ribbon text={text ?? 'New'} color="gold">
-      <ProductCard product={product} />
+      <ProductCard product={product} isWatching={isWatching} />
     </Badge.Ribbon>
   );
 }

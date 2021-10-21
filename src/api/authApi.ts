@@ -7,7 +7,9 @@ const prefix = '/auth';
 const authApi = {
   login: (data: object) => {
     const url = `${prefix}/login`;
-    return axiosClient.post(url, data);
+    const headers = getHeaders(true);
+
+    return axiosClient.post(url, data, headers);
   },
   signup: (data: object) => {
     const url = `${prefix}/register`;
@@ -19,7 +21,7 @@ const authApi = {
     const headers = getHeaders();
 
     return axiosClient.get(url, headers)
-      .then((res) => res.data);
+      .then((res) => res);
   },
 
   // TODO: Fix api, return all with 200 status
@@ -28,7 +30,7 @@ const authApi = {
     const headers = getHeaders();
 
     return axiosClient.post(url, data, headers)
-      .then((res) => res.data)
+      .then((res) => res)
       .catch((error) => error.message);
   },
 };

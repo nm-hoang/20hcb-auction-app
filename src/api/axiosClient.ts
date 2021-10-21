@@ -1,11 +1,10 @@
 import axios from 'axios';
 import queryString from 'querystring';
+import { getHeaders } from '../helpers/auth';
 
 const axiosClient = axios.create({
   baseURL: `${process.env.REACT_APP_API_GATEWAY}`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  ...getHeaders(),
   paramsSerializer: (params) => queryString.stringify(params),
 });
 

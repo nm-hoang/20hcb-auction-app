@@ -93,15 +93,15 @@ const authSlice = createSlice({
         state.msg_LogIn = MessageStatus.SUCCESS;
 
         const currentUser: CurrentUser = {
-          uuid: action.payload.data.uuid,
-          fullName: action.payload.data.fullName,
-          username: action.payload.data.username,
-          profilePicture: action.payload.data.profilePicture,
+          uuid: action.payload.uuid,
+          fullName: action.payload.fullName,
+          username: action.payload.username,
+          profilePicture: action.payload.profilePicture,
         };
 
         console.log(action);
-        setAccessTokenToLocalStorage(action.payload.data.accessToken);
-        setRoleToLocalStorage(action.payload.data.role);
+        setAccessTokenToLocalStorage(action.payload.accessToken);
+        setRoleToLocalStorage(action.payload.role);
         setCurrentUserToLocalStorage(currentUser);
         Notify.success('Logged in successfully', MessageStatus.SUCCESS);
       })

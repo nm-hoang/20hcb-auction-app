@@ -29,7 +29,7 @@ function ListProducts(props: IListProductProps): JSX.Element {
       <Row gutter={[32, 48]} justify="start" className="mb-3">
         {products?.map((product) => (
           <Col key={product._id} className="gutter-row" xxl={6} xl={6} lg={8} md={12} sm={24} xs={20}>
-            <StatedProductCard product={product} />
+            <StatedProductCard product={product} isWatching={product.isWatching} />
           </Col>
         ))}
       </Row>

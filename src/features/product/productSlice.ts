@@ -8,6 +8,8 @@ import {
 import productApi from '../../api/productApi';
 import { RootState } from '../../app/store';
 import { BidLogType } from '../../types/bidLogType';
+import { WatchlistType } from '../../types/watchlistType';
+import Notify from '../../helpers/notify';
 
 interface IProductSliceState extends IState<Product> {
   listNextClose?: Product[];
@@ -16,9 +18,11 @@ interface IProductSliceState extends IState<Product> {
   total?: number;
   bidLogs?: BidLogType[];
   bidLog?: BidLogType;
+  watchlist?: WatchlistType;
 }
 
 const productDomain = 'product';
+const watchlistDomain = 'watchlist';
 
 const initialState: IProductSliceState = {
   requesting: false,
@@ -59,6 +63,25 @@ export const patchPlaceBid = createAsyncThunk(
   ) => productApi.placeBid(patchPlaceBidQuery),
 );
 
+export const getWatchlist = createAsyncThunk(
+  `${watchlistDomain}/getWatchlist`,
+  async () => productApi.retrieveWatchlistByOwnerUUID(),
+);
+
+export const addProductToWatchlist = createAsyncThunk(
+  `${watchlistDomain}/addToWatchlist`,
+  async (
+    { productId }: { productId: string },
+  ) => productApi.addProductToWatchlist(productId),
+);
+
+function mapProductWithWatchlist(product: Product) {
+  return {
+    ...product,
+    isWatching: !product.isWatching,
+  };
+}
+
 const productSlice = createSlice({
   name: productDomain,
   initialState,
@@ -68,7 +91,7 @@ const productSlice = createSlice({
       .addCase(getProductCount.pending, (state: IProductSliceState) => {
         state.requesting = true;
       })
-      .addCase(getProductCount.fulfilled, (state: IProductSliceState, action) => {
+      .addCase(getProductCount.fulfilled, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.total = action.payload.count;
       })
@@ -87,7 +110,7 @@ const productSlice = createSlice({
       .addCase(getProduct.pending, (state: IProductSliceState) => {
         state.requesting = true;
       })
-      .addCase(getProduct.fulfilled, (state: IProductSliceState, action) => {
+      .addCase(getProduct.fulfilled, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.success = true;
         state.single = action.payload;
@@ -130,6 +153,7 @@ const productSlice = createSlice({
         state.requesting = false;
         state.success = true;
         state.bidLog = action.payload;
+
         if (state.bidLogs) {
           state.bidLogs = [
             ...state.bidLogs,
@@ -140,7 +164,72 @@ const productSlice = createSlice({
       .addCase(patchPlaceBid.rejected, (state: IProductSliceState, action: any) => {
         state.requesting = false;
         state.error = action.payload;
+      })
+      .addCase(getWatchlist.pending, (state: IProductSliceState) => {
+        state.requesting = true;
+        state.success = false;
+      })
+      .addCase(getWatchlist.fulfilled, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        state.watchlist = action.payload;
+      })
+      .addCase(getWatchlist.rejected, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.error = action.payload;
+      })
+      .addCase(addProductToWatchlist.pending, (state: IProductSliceState) => {
+        state.requesting = true;
+        state.success = false;
+      })
+      .addCase(addProductToWatchlist.fulfilled, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        state.watchlist = action.payload;
+
+        state.list = state.list?.map((product) => {
+          if (product._id === action.payload.productId) {
+            return mapProductWithWatchlist(product);
+          }
+
+          return product;
+        });
+
+        state.listHighestBidTurns = state.listHighestBidTurns?.map((product) => {
+          if (product._id === action.payload.productId) {
+            return mapProductWithWatchlist(product);
+          }
+
+          return product;
+        });
+
+        state.listHighestPrice = state.listHighestPrice?.map((product) => {
+          if (product._id === action.payload.productId) {
+            return mapProductWithWatchlist(product);
+          }
+
+          return product;
+        });
+
+        state.listNextClose = state.listNextClose?.map((product) => {
+          if (product._id === action.payload.productId) {
+            return mapProductWithWatchlist(product);
+          }
+
+          return product;
+        });
+
+        if (state.single) {
+          state.single = mapProductWithWatchlist(state.single);
+        }
+      })
+      .addCase(addProductToWatchlist.rejected, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.error = action.payload;
         console.log(action.payload);
+        Notify.error(action.payload, 'Place failed');
       });
   }),
 });
@@ -151,5 +240,7 @@ export const selectProductList = createSelector(
   [selectProduct],
   (state: IProductSliceState) => state.list,
 );
+
+export const selectProductWatchlist = (state: RootState) => state.product.watchlist;
 
 export default productSlice.reducer;

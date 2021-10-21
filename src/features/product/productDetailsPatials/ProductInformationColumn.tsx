@@ -31,7 +31,14 @@ function ProductInformationColumn(props: IProductInformationColumn): JSX.Element
         <Row>
           <Col span={24}>
             {!product
-            || <Header name={product.name} categoryName={product.category.name} />}
+            || (
+            <Header
+              productId={product._id}
+              name={product.name}
+              categoryName={product.category.name}
+              isWatching={product.isWatching}
+            />
+            )}
 
             <Row
               gutter={[48, 12]}

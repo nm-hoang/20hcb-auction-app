@@ -6,7 +6,7 @@ import { isNewProduct } from '../../helpers/isNewProduct';
 export interface IStatedProductCard extends IProductCardProp {}
 
 function StatedProductCard(props: IStatedProductCard): JSX.Element {
-  const { product } = props;
+  const { product, isWatching } = props;
   const [highlight, setHighlight] = useState<boolean>(false);
 
   useEffect(() => {
@@ -17,8 +17,8 @@ function StatedProductCard(props: IStatedProductCard): JSX.Element {
     <>
       {
         highlight
-          ? <RecentProductCard product={product} />
-          : <ProductCard product={product} />
+          ? <RecentProductCard product={product} isWatching={isWatching} />
+          : <ProductCard product={product} isWatching={isWatching} />
       }
     </>
   );
