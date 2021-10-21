@@ -9,6 +9,7 @@ import ProductDetails from '../features/product/page/ProductDetails';
 import UserProfilePage from '../features/profile/pages/UserProfilePage';
 import EditProfilePage from '../features/profile/pages/EditProfilePage';
 import ChangePasswordPage from '../features/profile/pages/ChangePasswordPage';
+import AddProduct from '../features/product/page/AddProduct';
 
 const routes = [
   {
@@ -50,6 +51,11 @@ const routes = [
     key: uuidv4(),
     path: '/profile/password/modify',
     component: ChangePasswordPage,
+  },
+  {
+    key: uuidv4(),
+    path: '/add-product',
+    component: AddProduct,
   },
 ];
 

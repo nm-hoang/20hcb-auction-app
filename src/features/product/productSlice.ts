@@ -75,6 +75,11 @@ export const addProductToWatchlist = createAsyncThunk(
   ) => productApi.addProductToWatchlist(productId),
 );
 
+export const createProduct = createAsyncThunk(
+  `${productDomain}/createProduct`,
+  async (product: Product) => productApi.createProduct(product),
+);
+
 function mapProductWithWatchlist(product: Product) {
   return {
     ...product,
@@ -230,6 +235,18 @@ const productSlice = createSlice({
         state.error = action.payload;
         console.log(action.payload);
         Notify.error(action.payload, 'Place failed');
+      })
+      .addCase(createProduct.pending, (state: IProductSliceState) => {
+        state.requesting = true;
+      })
+      .addCase(createProduct.fulfilled, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        console.log(action);
+      })
+      .addCase(createProduct.rejected, (state: IProductSliceState, action: any) => {
+        state.requesting = false;
+        state.error = action.payload;
       });
   }),
 });
@@ -242,5 +259,10 @@ export const selectProductList = createSelector(
 );
 
 export const selectProductWatchlist = (state: RootState) => state.product.watchlist;
+
+export const selectRequesting = createSelector(
+  [selectProduct],
+  (state: IProductSliceState) => state.requesting,
+);
 
 export default productSlice.reducer;
