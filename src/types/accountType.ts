@@ -16,6 +16,7 @@ export type User = {
   address: string
   fullName: string
   favorProducts: string[]
+  phoneNumber?: number
 }
 
 export interface Account {

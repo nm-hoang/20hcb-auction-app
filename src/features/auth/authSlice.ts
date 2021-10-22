@@ -67,6 +67,11 @@ export const changePassword = createAsyncThunk(
   async (data: ChangePasswordType) => authApi.changePassword(data),
 );
 
+export const updateProfile = createAsyncThunk(
+  'auth/updateProfile',
+  async (profile: object) => authApi.updateProfile(profile),
+);
+
 // ------------------------SLICERS------------------------
 const authSlice = createSlice({
   name: 'auth',
@@ -155,6 +160,22 @@ const authSlice = createSlice({
         }
       })
       .addCase(changePassword.rejected, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.error = action.payload;
+      })
+      .addCase(updateProfile.pending, (state: InitialStateI) => {
+        state.requesting = true;
+      })
+      .addCase(updateProfile.fulfilled, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        if (action.payload) {
+          state.error = action.payload;
+        }
+        Notify.success('Update profile successfully', 'Success!');
+      })
+      .addCase(updateProfile.rejected, (state: InitialStateI, action: any) => {
         state.requesting = false;
         state.success = false;
         state.error = action.payload;
