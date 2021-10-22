@@ -239,10 +239,10 @@ const productSlice = createSlice({
       .addCase(createProduct.pending, (state: IProductSliceState) => {
         state.requesting = true;
       })
-      .addCase(createProduct.fulfilled, (state: IProductSliceState, action: any) => {
+      .addCase(createProduct.fulfilled, (state: IProductSliceState) => {
         state.requesting = false;
         state.success = true;
-        console.log(action);
+        Notify.success('Add product successfully', 'Success!');
       })
       .addCase(createProduct.rejected, (state: IProductSliceState, action: any) => {
         state.requesting = false;
