@@ -11,7 +11,6 @@ import {
   Button,
   Select,
   DatePicker,
-  Rate,
   Upload,
   Spin,
 } from 'antd';
@@ -62,7 +61,6 @@ function AddProduct(): JSX.Element {
         bidStep: e.bidStep,
       },
       closeDate: Date.parse(e.closeDate),
-      rating: e.rating,
       bannedBidder: e.bannedBidder,
       description: {
         version: Date.now().toString(),
@@ -70,7 +68,6 @@ function AddProduct(): JSX.Element {
       },
       images: listImages,
     };
-    // console.log(product);
     dispatch(createProduct(product));
   };
 
@@ -112,12 +109,6 @@ function AddProduct(): JSX.Element {
             ]}
           >
             <Input placeholder="Product's name" autoComplete="on" />
-          </Form.Item>
-          <Form.Item
-            label="Rating"
-            name="rating"
-          >
-            <Rate defaultValue={0} />
           </Form.Item>
           <Form.Item
             label="Category"
