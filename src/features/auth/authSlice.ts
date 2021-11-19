@@ -6,8 +6,10 @@ import {
 import { RootState } from '../../app/store';
 import authApi from '../../api/authApi';
 import MessageStatus from '../../constants/message-status';
-import { setAccessTokenToLocalStorage, setRoleToLocalStorage } from '../../helpers/auth';
+import { setAccessTokenToLocalStorage, setCurrentUserToLocalStorage, setRoleToLocalStorage } from '../../helpers/auth';
 import Notify from '../../helpers/notify';
+import { Account, CurrentUser } from '../../types/accountType';
+import { ChangePasswordType } from '../../types/authType';
 
 interface InitialStateI {
   requesting: boolean,
@@ -15,6 +17,8 @@ interface InitialStateI {
   message?: string | undefined,
   msg_SignUp: string,
   msg_LogIn: string,
+  currentUserDetails?: Account,
+  error?: any
 }
 
 const initialState: InitialStateI = {
@@ -53,6 +57,21 @@ export const signup = createAsyncThunk(
   },
 );
 
+export const getMe = createAsyncThunk(
+  'auth/getMe',
+  async () => authApi.getMe(),
+);
+
+export const changePassword = createAsyncThunk(
+  'auth/changePassword',
+  async (data: ChangePasswordType) => authApi.changePassword(data),
+);
+
+export const updateProfile = createAsyncThunk(
+  'auth/updateProfile',
+  async (profile: object) => authApi.updateProfile(profile),
+);
+
 // ------------------------SLICERS------------------------
 const authSlice = createSlice({
   name: 'auth',
@@ -77,9 +96,18 @@ const authSlice = createSlice({
         state.requesting = false;
         state.success = true;
         state.msg_LogIn = MessageStatus.SUCCESS;
+
+        const currentUser: CurrentUser = {
+          uuid: action.payload.uuid,
+          fullName: action.payload.fullName,
+          username: action.payload.username,
+          profilePicture: action.payload.profilePicture,
+        };
+
         console.log(action);
-        setAccessTokenToLocalStorage(action.payload.data.accessToken);
-        setRoleToLocalStorage(action.payload.data.role);
+        setAccessTokenToLocalStorage(action.payload.accessToken);
+        setRoleToLocalStorage(action.payload.role);
+        setCurrentUserToLocalStorage(currentUser);
         Notify.success('Logged in successfully', MessageStatus.SUCCESS);
       })
       .addCase(login.rejected, (state, action: any) => {
@@ -109,6 +137,48 @@ const authSlice = createSlice({
         state.msg_SignUp = MessageStatus.ERROR;
         Notify.error(action.payload.message ? action.payload.message
           : action.error.message, MessageStatus.ERROR);
+      })
+      .addCase(getMe.pending, (state: InitialStateI) => {
+        state.requesting = true;
+      })
+      .addCase(getMe.fulfilled, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.currentUserDetails = action.payload;
+      })
+      .addCase(getMe.rejected, (state: InitialStateI) => {
+        state.requesting = false;
+        state.success = false;
+      })
+      .addCase(changePassword.pending, (state: InitialStateI) => {
+        state.requesting = true;
+      })
+      .addCase(changePassword.fulfilled, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        if (action.payload) {
+          state.error = action.payload;
+        }
+      })
+      .addCase(changePassword.rejected, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.error = action.payload;
+      })
+      .addCase(updateProfile.pending, (state: InitialStateI) => {
+        state.requesting = true;
+      })
+      .addCase(updateProfile.fulfilled, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = true;
+        if (action.payload) {
+          state.error = action.payload;
+        }
+        Notify.success('Update profile successfully', 'Success!');
+      })
+      .addCase(updateProfile.rejected, (state: InitialStateI, action: any) => {
+        state.requesting = false;
+        state.success = false;
+        state.error = action.payload;
       });
   },
 });
@@ -129,6 +199,11 @@ export const selectLogInMessage = createSelector(
 export const selectSignUpMessage = createSelector(
   [selectAuth],
   (state: any) => state.msg_SignUp,
+);
+
+export const selectGetMe = createSelector(
+  [selectAuth],
+  (state: InitialStateI) => state.currentUserDetails,
 );
 
 export default authSlice.reducer;

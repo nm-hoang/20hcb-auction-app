@@ -1,5 +1,8 @@
+import { CurrentUser } from '../types/accountType';
+
 const LOCAL_STORAGE_ACCESS_TOKEN = 'access_token';
 const LOCAL_STORAGE_ROLE = 'role';
+export const LOCAL_STORAGE_CURRENT_USER = 'current_user';
 
 export const setAccessTokenToLocalStorage = (accessToken: string) => {
   localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN, accessToken);
@@ -26,9 +29,33 @@ export const clearRoleFromLocalStorage = () => {
 export const checkAuth = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN);
 
-  if (!token) {
-    return false;
+  return !!token;
+};
+
+export const setCurrentUserToLocalStorage = (
+  currentUser: CurrentUser,
+) => localStorage.setItem(LOCAL_STORAGE_CURRENT_USER, JSON.stringify(currentUser));
+
+export const getCurrentUserFromLocalStorage = (
+) => JSON.parse(localStorage.getItem(LOCAL_STORAGE_CURRENT_USER) as string);
+
+export const getHeaders = (noAuth?: boolean) => {
+  const accessToken = getAccessTokenFromLocalStorage();
+
+  const defaultHeaders = {
+    headers: {
+      accept: '*/*',
+    },
+  };
+
+  if (noAuth) {
+    return defaultHeaders;
   }
 
-  return true;
+  return {
+    ...defaultHeaders,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
 };
