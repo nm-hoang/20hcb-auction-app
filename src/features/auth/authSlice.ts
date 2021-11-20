@@ -104,18 +104,16 @@ const authSlice = createSlice({
           profilePicture: action.payload.profilePicture,
         };
 
-        console.log(action);
         setAccessTokenToLocalStorage(action.payload.accessToken);
         setRoleToLocalStorage(action.payload.role);
         setCurrentUserToLocalStorage(currentUser);
         Notify.success('Logged in successfully', MessageStatus.SUCCESS);
       })
       .addCase(login.rejected, (state, action: any) => {
-        console.log(action);
         state.requesting = false;
         state.success = false;
         state.msg_LogIn = MessageStatus.ERROR;
-        Notify.error(action.payload.message ? action.payload.message
+        Notify.error(action.payload?.message ? action.payload.message
           : action.error.message, MessageStatus.ERROR);
       })
       // Signup
@@ -135,7 +133,7 @@ const authSlice = createSlice({
         state.requesting = false;
         state.success = false;
         state.msg_SignUp = MessageStatus.ERROR;
-        Notify.error(action.payload.message ? action.payload.message
+        Notify.error(action.payload?.message ? action.payload.message
           : action.error.message, MessageStatus.ERROR);
       })
       .addCase(getMe.pending, (state: InitialStateI) => {
