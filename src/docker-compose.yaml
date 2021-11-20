@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  api:
+    restart: on-failure
+    container_name: app-auction
+    build: .
+    ports:
+      - 3000:3000
+    command: npm run start
